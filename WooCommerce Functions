@@ -1,0 +1,70 @@
+// Since WooCommerce 3.0 we have to declare gallery support
+if ( function_exists( 'add_theme_support' ) ) { 
+    add_theme_support( 'post-thumbnails' ); 
+    add_theme_support( 'woocommerce' );
+    add_theme_support( 'wc-product-gallery-zoom' );
+    add_theme_support( 'wc-product-gallery-lightbox' );
+    add_theme_support( 'wc-product-gallery-slider' );
+}
+
+// Change the Number of Columns Displayed Per Page
+add_filter( 'loop_shop_columns', 'fn_change_loop_shop_columns' );
+
+function fn_change_loop_shop_columns( $columns ) {
+	$columns = 3;
+	return $columns;
+}
+
+/**
+ * Change number of related/upsell products output
+ */ 
+add_filter( 'woocommerce_output_related_products_args', 'fn_change_number_related_products', 20 );
+add_filter( 'woocommerce_upsell_display_args', 'fn_change_number_related_products', 20 );
+  function fn_change_number_related_products( $args ) {
+	$args['posts_per_page'] = 6; // 4 related products
+	$args['columns'] = 3; // arranged in 2 columns
+	return $args;
+}
+
+// Change No. of Thumbnails per Row @ Product Gallery | WooCommerce
+add_filter( 'woocommerce_single_product_image_gallery_classes', 'fn_change_columns_product_gallery' );
+ 
+function fn_change_columns_product_gallery( $wrapper_classes ) {
+	$columns = 4; // change this to 2, 3, 5, etc. Default is 4.
+	$wrapper_classes[2] = 'woocommerce-product-gallery--columns-' . absint( $columns );
+	return $wrapper_classes;
+}
+
+// Show Primary category by Yoast if it is enabled & set
+function get_post_primary_category($post_id, $term='category', $return_all_categories=false){
+    $return = array();
+
+    if (class_exists('WPSEO_Primary_Term')){
+        // Show Primary category by Yoast if it is enabled & set
+        $wpseo_primary_term = new WPSEO_Primary_Term( $term, $post_id );
+        $primary_term = get_term($wpseo_primary_term->get_primary_term());
+
+        if (!is_wp_error($primary_term)){
+            $return['primary_category'] = $primary_term;
+        }
+    }
+
+    if (empty($return['primary_category']) || $return_all_categories){
+        $categories_list = get_the_terms($post_id, $term);
+
+        if (empty($return['primary_category']) && !empty($categories_list)){
+            $return['primary_category'] = $categories_list[0];  //get the first category
+        }
+        if ($return_all_categories){
+            $return['all_categories'] = array();
+
+            if (!empty($categories_list)){
+                foreach($categories_list as &$category){
+                    $return['all_categories'][] = $category->term_id;
+                }
+            }
+        }
+    }
+
+    return $return;
+}
