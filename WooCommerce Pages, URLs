@@ -1,0 +1,24 @@
+// Get a WooCommerce Page ID
+$myaccount_page_id     = wc_get_page_id( 'myaccount' );
+$shop_page_id          = wc_get_page_id( 'shop' );
+$cart_page_id          = wc_get_page_id( 'cart' );
+$checkout_page_id      = wc_get_page_id( 'checkout' );
+$terms_page_id         = wc_get_page_id( 'terms' );
+
+// Get The Page ID You Need
+get_option( 'woocommerce_shop_page_id' ); 
+get_option( 'woocommerce_cart_page_id' ); 
+get_option( 'woocommerce_checkout_page_id' );
+get_option( 'woocommerce_pay_page_id' ); 
+get_option( 'woocommerce_thanks_page_id' ); 
+get_option( 'woocommerce_myaccount_page_id' ); 
+get_option( 'woocommerce_edit_address_page_id' ); 
+get_option( 'woocommerce_view_order_page_id' ); 
+get_option( 'woocommerce_terms_page_id' ); 
+
+// Get a WooCommerce Page URL
+$myaccount_url     = wc_get_page_permalink( 'myaccount' );
+$shop_url          = wc_get_page_permalink( 'shop' );
+$cart_url          = wc_get_page_permalink( 'cart' );
+$checkout_url      = wc_get_page_permalink( 'checkout' );
+$terms_url         = wc_get_page_permalink( 'terms' );
